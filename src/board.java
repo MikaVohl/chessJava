@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-
-public class board {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class Board implements ActionListener{
     public JFrame boardFrame;
     public JPanel boardPanel;
-    public board(){
+    public Board(){
         boardFrame = new JFrame();
         boardPanel = new JPanel();
 
@@ -27,6 +28,8 @@ public class board {
                     square.setBackground(Color.white);
                 }
                 square.setSize(new Dimension(80, 80));
+                square.setActionCommand(row+""+col); // Set a custom action command
+                square.addActionListener(this);
 
                 // Add an image over the button
                 ImageIcon imageIcon = new ImageIcon("resources/bking.png");
@@ -43,6 +46,11 @@ public class board {
         }
 
     }
+
+    public void actionPerformed(ActionEvent e) {
+        // Do something when the button is pressed
+        System.out.println(e.getActionCommand());
+    }
     public static void main(String[] args) {
         try{
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -50,6 +58,6 @@ public class board {
         catch (Exception e){
             e.printStackTrace();
         }
-        new board();
+        new Board();
     }
 }
