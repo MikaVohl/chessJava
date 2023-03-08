@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class Board implements ActionListener{
     public boolean picked = false;
     public String firstPiece = "";
@@ -27,6 +30,16 @@ public class Board implements ActionListener{
         for(int row = 0; row < 8; row++){
             for(int col = 0; col < 8; col++){
                 JButton square = new JButton();
+
+                // If user right clicks, ignore previous click
+                square.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getButton() == MouseEvent.BUTTON3) {
+                            picked = false;
+                        }
+                    }
+                });
+
                 if((row + col)%2 == 0){
                     square.setBackground(Color.white);
                 }
@@ -74,10 +87,10 @@ public class Board implements ActionListener{
                             imageIcon = new ImageIcon("resources/wqueen.png");
                         }
                         else if(col == 4){
-                            imageIcon = new ImageIcon("resources/wking.svg");
+                            imageIcon = new ImageIcon("resources/wking.png");
                         }
                     }
-                    Image image = imageIcon.getImage().getScaledInstance(square.getWidth(), square.getHeight(), Image.SCALE_SMOOTH); // creates image
+                    Image image = imageIcon.getImage().getScaledInstance(square.getWidth()+20, square.getHeight()+20, Image.SCALE_SMOOTH); // creates image
                     ImageIcon newIcon = new ImageIcon(image); // uses image to create an icon
                     JLabel imageLabel = new JLabel(newIcon); // sets imageLabel to the icon
                     imageLabel.setBounds(0, 0, square.getWidth(), square.getHeight());
@@ -94,8 +107,6 @@ public class Board implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
-        // Do something when the button is pressed
-//        System.out.println(e.getActionCommand());
         if(!picked){ // First click
             picked = true;
             firstPiece = e.getActionCommand();
@@ -103,24 +114,30 @@ public class Board implements ActionListener{
         else{ // Second click
             picked = false;
             secondPiece = e.getActionCommand();
+            if(firstPiece == secondPiece){
+                picked = false;
+                return;
+            }
             // Trying to access the button at a certain coordinate
-//            System.out.println("First Piece: "+firstPiece);
-//            System.out.println("Second Piece: "+secondPiece);
             int first1 = Character.getNumericValue(firstPiece.charAt(0));
             int first2 = Character.getNumericValue(firstPiece.charAt(1));
             int second1 = Character.getNumericValue(secondPiece.charAt(0));
             int second2 = Character.getNumericValue(secondPiece.charAt(1));
-            JButton firstIcon = buttons[first1][first2];
-            JButton secondIcon = buttons[second1][second2];
+            JButton firstButton = buttons[first1][first2];
+            JButton secondButton = buttons[second1][second2];
 
-            Icon icon = firstIcon.getIcon();
+            secondButton.removeAll(); // Removes the current icon
+            secondButton.repaint(); // Updates the icon
 
-            secondIcon.setIcon(icon);
+            JLabel firstPieceLabel = (JLabel) firstButton.getComponent(0);
+            ImageIcon piece = (ImageIcon) firstPieceLabel.getIcon();
+            JLabel pieceLabel = new JLabel(piece);
+            pieceLabel.setBounds(0, 0, secondButton.getWidth(), secondButton.getHeight());
+            secondButton.add(pieceLabel); // Adds the icon from the first click to the second
 
-            // Remove the icon from the first button
-//            firstIcon.setIcon(null);
-            firstIcon.removeAll();
-            firstIcon.repaint();
+
+            firstButton.removeAll(); // Removes the current icon
+            firstButton.repaint(); // Updates the icon
         }
     }
     public static void main(String[] args) {
