@@ -12,6 +12,9 @@ public class Board implements ActionListener{
     public JFrame boardFrame;
     public JPanel boardPanel;
     public JButton[][] buttons;
+    public boolean turn = true;
+    public int first1 = 0, first2 = 0, second1 = 0, second2 = 0;
+    Piece pieceChecker = new Piece();
     public Board(){
         boardFrame = new JFrame();
         boardPanel = new JPanel();
@@ -107,22 +110,38 @@ public class Board implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
+//        int first1 = 0;
+//        int first2 = 0;
+//        int second1 = 0;
+//        int second2 = 0;
         if(!picked){ // First click
-            picked = true;
             firstPiece = e.getActionCommand();
+            first1 = Character.getNumericValue(firstPiece.charAt(0));
+            first2 = Character.getNumericValue(firstPiece.charAt(1));
+            System.out.println("first: "+first1+first2);
+            if(pieceChecker.isValidFirst(first1, first2, turn)){
+                picked = true;
+            }
+            else{
+                picked = false;
+            }
         }
         else{ // Second click
-            picked = false;
             secondPiece = e.getActionCommand();
-            if(firstPiece.equals(secondPiece)){
-                picked = false;
-                return;
-            }
+            second1 = Character.getNumericValue(secondPiece.charAt(0));
+            second2 = Character.getNumericValue(secondPiece.charAt(1));
+            System.out.println("second: "+second1+second2);
+            picked = false;
+
+
+
+//            if(firstPiece.equals(secondPiece)){
+//                picked = false;
+//                return;
+//            }
+
             // Trying to access the button at a certain coordinate
-            int first1 = Character.getNumericValue(firstPiece.charAt(0));
-            int first2 = Character.getNumericValue(firstPiece.charAt(1));
-            int second1 = Character.getNumericValue(secondPiece.charAt(0));
-            int second2 = Character.getNumericValue(secondPiece.charAt(1));
+
             JButton firstButton = buttons[first1][first2];
             JButton secondButton = buttons[second1][second2];
 
@@ -135,7 +154,8 @@ public class Board implements ActionListener{
             pieceLabel.setBounds(0, 0, secondButton.getWidth(), secondButton.getHeight());
             secondButton.add(pieceLabel); // Adds the icon from the first click to the second
 
-
+            pieceChecker.makeMove(first1, first2, second1, second2);
+            turn = !turn;
             firstButton.removeAll(); // Removes the current icon
             firstButton.repaint(); // Updates the icon
         }
