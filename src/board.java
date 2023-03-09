@@ -114,7 +114,7 @@ public class Board implements ActionListener{
         else{ // Second click
             picked = false;
             secondPiece = e.getActionCommand();
-            if(firstPiece == secondPiece){
+            if(firstPiece.equals(secondPiece)){
                 picked = false;
                 return;
             }
