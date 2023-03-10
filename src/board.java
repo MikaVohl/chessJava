@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class Board implements ActionListener{
     public boolean picked = false;
@@ -110,37 +111,43 @@ public class Board implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
-//        int first1 = 0;
-//        int first2 = 0;
-//        int second1 = 0;
-//        int second2 = 0;
         if(!picked){ // First click
             firstPiece = e.getActionCommand();
             first1 = Character.getNumericValue(firstPiece.charAt(0));
             first2 = Character.getNumericValue(firstPiece.charAt(1));
-            System.out.println("first: "+first1+first2);
+            boolean[][] validBoard = pieceChecker.rookMove(first1, first2, turn);
+
             if(pieceChecker.isValidFirst(first1, first2, turn)){
                 picked = true;
+                for(int i = 0; i <= 7; i++){
+                    for(int j = 0; j <= 7; j++){
+                        if(validBoard[i][j] == true){
+                            buttons[i][j].setBackground(Color.red);
+                        }
+                    }
+                }
             }
             else{
                 picked = false;
             }
         }
         else{ // Second click
+
+            for(int i = 0; i <= 7; i++){
+                for(int j = 0; j <= 7; j++){
+                    if((i + j)%2 == 0){
+                        buttons[i][j].setBackground(Color.white);
+                    }
+                    else{
+                        buttons[i][j].setBackground(Color.gray);
+                    }
+                }
+            }
+
             secondPiece = e.getActionCommand();
             second1 = Character.getNumericValue(secondPiece.charAt(0));
             second2 = Character.getNumericValue(secondPiece.charAt(1));
-            System.out.println("second: "+second1+second2);
             picked = false;
-
-
-
-//            if(firstPiece.equals(secondPiece)){
-//                picked = false;
-//                return;
-//            }
-
-            // Trying to access the button at a certain coordinate
 
             JButton firstButton = buttons[first1][first2];
             JButton secondButton = buttons[second1][second2];
