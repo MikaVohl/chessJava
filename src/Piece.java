@@ -187,6 +187,27 @@ public class Piece {
         return validMove;
     }
 
+    public boolean[][] knightMove(int row, int col, boolean currentTurn){
+        boolean validMove[][] = new boolean[8][8];
+        int[] rowOffset = {-2, -2, -1, 1, 2, 2, -1, -1};
+        int[] colOffset = {-1, 1, -2, -2, -1, 1, 2, -2};
+        for(int i=0; i<8; i++){
+            int rowChange = row + rowOffset[i];
+            int colChange = col + colOffset[i];
+            if(rowChange <= 7 && rowChange >= 0 && colChange <= 7 && colChange >= 0)
+            if(positions[rowChange][colChange] == ' '){
+                validMove[rowChange][colChange] = true;
+            }
+            else if(Character.isLowerCase(positions[rowChange][colChange]) && currentTurn){
+                validMove[rowChange][colChange] = true;
+            }
+            else if(Character.isUpperCase(positions[rowChange][colChange]) && !currentTurn){
+                validMove[rowChange][colChange] = true;
+            }
+        }
+        return validMove;
+    }
+
     public boolean[][] choosePiece(int coord1, int coord2, boolean currTurn){
         if(Character.toLowerCase(positions[coord1][coord2]) == 'p')
             return pawnMove(coord1, coord2, currTurn);
@@ -194,6 +215,8 @@ public class Piece {
             return rookMove(coord1, coord2, currTurn);
         else if(Character.toLowerCase(positions[coord1][coord2]) == 'b')
             return bishopMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'n')
+            return knightMove(coord1, coord2, currTurn);
         return pawnMove(coord1, coord2, currTurn);
     }
 
@@ -295,23 +318,4 @@ public class Piece {
 //        System.out.println(Arrays.deepToString(validMove).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n\n");
         return validMove;
     }
-
-//    public int changeDirection(int row, int col, int number, String request){
-//        if(request == "upRight"){
-//            int result1 = row - number;
-//            int result2 = col + number;
-//        }
-//        else if(request == "upLeft"){
-//            int result1 = row - number;
-//            int result2 = col - number;
-//        }
-//        else if(request == "botRight"){
-//            int result1 = row + number;
-//            int result2 = col + number;
-//        }
-//        else if(request == "botLeft"){
-//            int result1 = row + number;
-//            int result2 = col - number;
-//        }
-//    }
 }
