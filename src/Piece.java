@@ -192,6 +192,126 @@ public class Piece {
             return pawnMove(coord1, coord2, currTurn);
         else if(Character.toLowerCase(positions[coord1][coord2]) == 'r')
             return rookMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'b')
+            return bishopMove(coord1, coord2, currTurn);
         return pawnMove(coord1, coord2, currTurn);
     }
+
+    public boolean[][] bishopMove(int row, int col, boolean currentTurn){
+
+        boolean validMove[][] = new boolean[8][8];
+        for(int i=0; (row - i) >= 0 && (col + i) <= 7; i++){ // check to the top right
+            if(col == 7 || row == 0){ // if in top row or right column
+                break;
+            }
+            if(i == 0){
+                continue;
+            }
+            if(positions[row-i][col+i] == ' '){
+                validMove[row-i][col+i] = true;
+            }
+            else if(currentTurn == true){ // if whites turn
+                if(Character.isLowerCase(positions[row-i][col+i])){ // if encountering a black piece
+                    validMove[row-i][col+i] = true;
+                }
+                break;
+            }
+            else{ // if blacks turn
+                if(Character.isUpperCase(positions[row-i][col+i])){ // if encountering white piece
+                    validMove[row-i][col+i] = true;
+                }
+                break;
+            }
+        }
+        for(int i=0; (row - i) >= 0 && (col - i) >= 0; i++){ // check to the top left
+            if(col == 0 || row == 0){ // if in top row or left column
+                break;
+            }
+            if(i == 0){
+                continue;
+            }
+            if(positions[row-i][col-i] == ' '){
+                validMove[row-i][col-i] = true;
+            }
+            else if(currentTurn == true){ // if whites turn
+                if(Character.isLowerCase(positions[row-i][col-i])){ // if encountering a black piece
+                    validMove[row-i][col-i] = true;
+                }
+                break;
+            }
+            else{ // if blacks turn
+                if(Character.isUpperCase(positions[row-i][col-i])){ // if encountering white piece
+                    validMove[row-i][col-i] = true;
+                }
+                break;
+            }
+        }
+        for(int i=0; (row + i) <= 7 && (col - i) >= 0; i++){ // check to the bottom left
+            if(col == 0 || row == 7){ // if in bottom row or left column
+                break;
+            }
+            if(i == 0){
+                continue;
+            }
+            if(positions[row+i][col-i] == ' '){
+                validMove[row+i][col-i] = true;
+            }
+            else if(currentTurn == true){ // if whites turn
+                if(Character.isLowerCase(positions[row+i][col-i])){ // if encountering a black piece
+                    validMove[row+i][col-i] = true;
+                }
+                break;
+            }
+            else{ // if blacks turn
+                if(Character.isUpperCase(positions[row+i][col-i])){ // if encountering white piece
+                    validMove[row+i][col-i] = true;
+                }
+                break;
+            }
+        }
+        for(int i=0; (row + i) <= 7 && (col + i) <= 7; i++){ // check to the bottom right
+            if(col == 7 || row == 7){ // if in bottom row or right column
+                break;
+            }
+            if(i == 0){
+                continue;
+            }
+            if(positions[row+i][col+i] == ' '){
+                validMove[row+i][col+i] = true;
+            }
+            else if(currentTurn == true){ // if whites turn
+                if(Character.isLowerCase(positions[row+i][col+i])){ // if encountering a black piece
+                    validMove[row+i][col+i] = true;
+                }
+                break;
+            }
+            else{ // if blacks turn
+                if(Character.isUpperCase(positions[row+i][col+i])){ // if encountering white piece
+                    validMove[row+i][col+i] = true;
+                }
+                break;
+            }
+        }
+//        System.out.println(Arrays.deepToString(validMove).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n\n");
+        return validMove;
+    }
+
+//    public int changeDirection(int row, int col, int number, String request){
+//        if(request == "upRight"){
+//            int result1 = row - number;
+//            int result2 = col + number;
+//        }
+//        else if(request == "upLeft"){
+//            int result1 = row - number;
+//            int result2 = col - number;
+//        }
+//        else if(request == "botRight"){
+//            int result1 = row + number;
+//            int result2 = col + number;
+//        }
+//        else if(request == "botLeft"){
+//            int result1 = row + number;
+//            int result2 = col - number;
+//        }
+//    }
 }
