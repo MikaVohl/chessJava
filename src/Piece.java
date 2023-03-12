@@ -18,7 +18,6 @@ public class Piece {
         positions[initial1][initial2] = ' ';
     }
 
-
     public boolean isValidFirst(int clickCoordRow, int clickCoordCol, boolean currentTurn){
         // First click is invalid if clicking on whitespace, the wrong color piece
         char currentPiece = positions[clickCoordRow][clickCoordCol];
@@ -37,6 +36,20 @@ public class Piece {
         return true;
     }
 
+    public boolean[][] queenMove(int row, int col, boolean currentTurn){
+        boolean validMove[][] = new boolean[8][8];
+        boolean validRook[][] = rookMove(row, col, currentTurn);
+        boolean validBishop[][] = bishopMove(row, col, currentTurn);
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                validMove[i][j] = validRook[i][j];
+                if(validBishop[i][j] == true){
+                    validMove[i][j] = validBishop[i][j];
+                }
+            }
+        }
+        return validMove;
+    }
     public boolean[][] rookMove(int row, int col, boolean currentTurn){
         boolean validMove[][] = new boolean[8][8];
         for(int i=col; i <= 7; i++){ // check to the right
@@ -217,6 +230,8 @@ public class Piece {
             return bishopMove(coord1, coord2, currTurn);
         else if(Character.toLowerCase(positions[coord1][coord2]) == 'n')
             return knightMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'q')
+            return queenMove(coord1, coord2, currTurn);
         return pawnMove(coord1, coord2, currTurn);
     }
 

@@ -14,7 +14,7 @@ public class Board implements ActionListener{
     public JButton[][] buttons;
     public boolean turn = true;
     public int first1 = 0, first2 = 0, second1 = 0, second2 = 0;
-    public boolean[][] validBoard =new boolean[8][8];
+    public boolean[][] validBoard = new boolean[8][8];
     Piece pieceChecker = new Piece();
     public Board(){
         boardFrame = new JFrame();
@@ -40,6 +40,7 @@ public class Board implements ActionListener{
                     public void mouseClicked(MouseEvent e) {
                         if (e.getButton() == MouseEvent.BUTTON3) {
                             picked = false;
+                            setBoardBackground();
                         }
                     }
                 });
@@ -132,16 +133,7 @@ public class Board implements ActionListener{
             }
         }
         else{ // Second click
-            for(int i = 0; i <= 7; i++){
-                for(int j = 0; j <= 7; j++){
-                    if((i + j)%2 == 0){
-                        buttons[i][j].setBackground(Color.white);
-                    }
-                    else{
-                        buttons[i][j].setBackground(Color.gray);
-                    }
-                }
-            }
+            setBoardBackground();
 
             secondPiece = e.getActionCommand();
             second1 = Character.getNumericValue(secondPiece.charAt(0));
@@ -167,6 +159,19 @@ public class Board implements ActionListener{
 
             }
 
+        }
+    }
+
+    public void setBoardBackground(){
+        for(int i = 0; i <= 7; i++){
+            for(int j = 0; j <= 7; j++){
+                if((i + j)%2 == 0){
+                    buttons[i][j].setBackground(Color.white);
+                }
+                else{
+                    buttons[i][j].setBackground(Color.gray);
+                }
+            }
         }
     }
     public static void main(String[] args) {
