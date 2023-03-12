@@ -16,6 +16,7 @@ public class Board implements ActionListener{
     public int first1 = 0, first2 = 0, second1 = 0, second2 = 0;
     public boolean[][] validBoard = new boolean[8][8];
     Piece pieceChecker = new Piece();
+    CheckChecker dangerCheck = new CheckChecker();
     public Board(){
         boardFrame = new JFrame();
         boardPanel = new JPanel();
@@ -117,7 +118,6 @@ public class Board implements ActionListener{
             first1 = Character.getNumericValue(firstPiece.charAt(0));
             first2 = Character.getNumericValue(firstPiece.charAt(1));
             validBoard = pieceChecker.choosePiece(first1, first2, turn);
-
             if(pieceChecker.isValidFirst(first1, first2, turn)){
                 picked = true;
                 for(int i = 0; i <= 7; i++){
