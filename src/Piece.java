@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Piece {
 
-    public char[][] positions = {
+    public static char[][] positions = {
         {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -12,6 +12,11 @@ public class Piece {
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
     };
+
+
+    public void setPositions(int row, int col, char value){
+        positions[row][col] = value;
+    }
 
     public void makeMove(int initial1, int initial2, int next1, int next2){
         positions[next1][next2] = positions[initial1][initial2];
@@ -37,20 +42,24 @@ public class Piece {
     }
 
     public boolean[][] choosePiece(int coord1, int coord2, boolean currTurn){
-        if(Character.toLowerCase(positions[coord1][coord2]) == 'p')
+//        System.out.println("Choose array");
+//        System.out.println(Arrays.deepToString(positions).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n");
+        char piece = Character.toLowerCase(positions[coord1][coord2]);
+        if(piece == 'p')
             return pawnMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'r')
+        else if(piece == 'r')
             return rookMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'b')
+        else if(piece == 'b')
             return bishopMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'n')
+        else if(piece == 'n')
             return knightMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'q')
+        else if(piece == 'q')
             return queenMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'k')
+        else if(piece == 'k')
             return kingMove(coord1, coord2, currTurn);
         return pawnMove(coord1, coord2, currTurn);
     }
+
     public boolean[][] queenMove(int row, int col, boolean currentTurn){
         boolean validMove[][] = new boolean[8][8];
         boolean validRook[][] = rookMove(row, col, currentTurn);
@@ -259,7 +268,8 @@ public class Piece {
         return validMove;
     }
 
-    public boolean[][] pawnMove(int row, int col, boolean currentTurn){
+    public boolean[][] pawnMove(int row, int col, boolean currentTurn){ // needs to show where black threatens white
+
         boolean validMove[][] = new boolean[8][8];
         byte edge = 0;
         byte oneOffEdge = 1;
@@ -311,6 +321,8 @@ public class Piece {
     }
 
     public boolean[][] knightMove(int row, int col, boolean currentTurn){
+//        System.out.println("Knight array");
+//        System.out.println(Arrays.deepToString(positions).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n");
         boolean validMove[][] = new boolean[8][8];
         int[] rowOffset = {-2, -2, -1, 1, 2, 2, -1, -1};
         int[] colOffset = {-1, 1, -2, -2, -1, 1, 2, -2};

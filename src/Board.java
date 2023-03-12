@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class Board implements ActionListener{
     public boolean picked = false;
@@ -118,6 +119,7 @@ public class Board implements ActionListener{
             first1 = Character.getNumericValue(firstPiece.charAt(0));
             first2 = Character.getNumericValue(firstPiece.charAt(1));
             validBoard = pieceChecker.choosePiece(first1, first2, turn);
+
             if(pieceChecker.isValidFirst(first1, first2, turn)){
                 picked = true;
                 for(int i = 0; i <= 7; i++){
@@ -133,7 +135,10 @@ public class Board implements ActionListener{
             }
         }
         else{ // Second click
+
             setBoardBackground();
+
+
 
             secondPiece = e.getActionCommand();
             second1 = Character.getNumericValue(secondPiece.charAt(0));
@@ -156,6 +161,20 @@ public class Board implements ActionListener{
                 turn = !turn;
                 firstButton.removeAll(); // Removes the current icon
                 firstButton.repaint(); // Updates the icon
+
+                for(int i=0; i<=7; i++){
+                    for(int j=0; j<=7; j++){
+                        if(Piece.positions[i][j] == 'K'){ // if black is moving and encountering white king
+                            dangerCheck.CheckChecker(true, i,j);
+                            break;
+                        }
+                        if(Piece.positions[i][j] == 'k'){
+                            dangerCheck.CheckChecker(false, i,j);
+                            break;
+                        }
+                    }
+                }
+//                System.out.println(Arrays.deepToString(Piece.positions).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 
             }
 

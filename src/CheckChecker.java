@@ -1,64 +1,61 @@
 import java.util.Arrays;
 
 public class CheckChecker {
-    public boolean CheckChecker(char[][] piecePositions, boolean kingSide, int kingRow, int kingCol){
-        boolean inDanger = false;
-        boolean[][] dangerousSquares = new boolean[8][8];
+    public boolean CheckChecker(boolean kingSide, int kingRow, int kingCol){
+//        System.out.println(Arrays.deepToString(pieceClass.getPositions()).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+        boolean[][] dangerousSquares;
+        boolean[][] totalDangerSquares = new boolean[8][8];
         Piece pieceMoves = new Piece();
-
         // get every array of valid moves from every enemy piece
-        for(int i=0; i<=7; i++){
-            for(int j=0; j<=7; j++){
-                char currentPiece = piecePositions[i][j];
-                dangerousSquares = new boolean[8][8];
-                // if kingSide is true, checking if white is in check
-                // if kingSide is false, checking if black is in check
-                if(kingSide){ // if white king is being checked
-                    if(currentPiece == 'p'){
-                        dangerousSquares = pieceMoves.pawnMove(i, j, kingSide);
+        for(int i=0; i<=7; i++){ // loop through every row of the board
+            for(int j=0; j<=7; j++){ // loop through every column of the board
+                dangerousSquares = new boolean[8][8]; // Fills array with false values
+                if(Piece.positions[i][j] != ' '){ // if current row and column has something on the board
+
+                    if(kingSide){ // if we are looking for checks on the white king
+                        if(Character.isLowerCase(Piece.positions[i][j])){ // if the piece at the current position is black
+//                            dangerousSquares = pieceMoves.choosePiece(i, j, false);
+                            dangerousSquares = pieceMoves.choosePiece(i, j, false);
+                        }
                     }
-                    else if(currentPiece == 'n'){
-                        dangerousSquares = pieceMoves.knightMove(i, j, kingSide);
+                    else{ // if we are looking for checks on the black king
+                        if(Character.isUpperCase(Piece.positions[i][j])){ // if the piece at the current position is white
+//                            dangerousSquares = pieceMoves.choosePiece(i, j, true);
+                            dangerousSquares = pieceMoves.choosePiece(i, j, true);
+                        }
                     }
-                    else if(currentPiece == 'r'){
-                        dangerousSquares = pieceMoves.rookMove(i, j, kingSide);
+
+
+
+//                    System.out.println(Arrays.deepToString(dangerousSquares).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n");
+                    System.out.println(kingRow+"   "+ kingCol);
+                    if(dangerousSquares[kingRow][kingCol] == true){
+                        System.out.println("King row is "+kingRow+" king col is "+kingCol);
+                        if(kingSide)
+                            System.out.println("white is in check");
+                        else
+                            System.out.println("black is in check");
+//                        System.out.println(Piece.positions[i][j] +" "+ i +", "+ j);
+                        return true;
                     }
-                    else if(currentPiece == 'q'){
-                        dangerousSquares = pieceMoves.queenMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'b'){
-                        dangerousSquares = pieceMoves.bishopMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'k'){
-                        dangerousSquares = pieceMoves.kingMove(i, j, kingSide);
-                    }
-                }
-                else{
-                    if(currentPiece == 'P'){
-                        dangerousSquares = pieceMoves.pawnMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'N'){
-                        dangerousSquares = pieceMoves.knightMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'R'){
-                        dangerousSquares = pieceMoves.rookMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'Q'){
-                        dangerousSquares = pieceMoves.queenMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'B'){
-                        dangerousSquares = pieceMoves.bishopMove(i, j, kingSide);
-                    }
-                    else if(currentPiece == 'K'){
-                        dangerousSquares = pieceMoves.kingMove(i, j, kingSide);
+
+                    for(int x=0; x<=7; x++){
+                        for(int y=0; y<=7; y++){
+                            if(dangerousSquares[x][y] == true)
+                                totalDangerSquares[x][y] = true;
+                        }
                     }
                 }
-                if(dangerousSquares[kingRow][kingCol] == true){
-                    System.out.println(true);
-                    return true;
-                }
+
             }
         }
+        if(kingSide)
+            System.out.println("Squares that are dangerous for white");
+        else
+            System.out.println("Squares that are dangerous for black");
+
+        System.out.println(Arrays.deepToString(totalDangerSquares).replace("], ", "]\n").replace("[[", "[").replace("]]", "]")+"\n");
+
         System.out.println(false);
         return false;
     }
