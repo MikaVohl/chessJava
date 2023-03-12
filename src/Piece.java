@@ -3,14 +3,14 @@ import java.util.Arrays;
 public class Piece {
 
     public char[][] positions = {
-            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
-            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-            {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
+        {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+        {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+        {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
     };
 
     public void makeMove(int initial1, int initial2, int next1, int next2){
@@ -36,6 +36,21 @@ public class Piece {
         return true;
     }
 
+    public boolean[][] choosePiece(int coord1, int coord2, boolean currTurn){
+        if(Character.toLowerCase(positions[coord1][coord2]) == 'p')
+            return pawnMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'r')
+            return rookMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'b')
+            return bishopMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'n')
+            return knightMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'q')
+            return queenMove(coord1, coord2, currTurn);
+        else if(Character.toLowerCase(positions[coord1][coord2]) == 'k')
+            return kingMove(coord1, coord2, currTurn);
+        return pawnMove(coord1, coord2, currTurn);
+    }
     public boolean[][] queenMove(int row, int col, boolean currentTurn){
         boolean validMove[][] = new boolean[8][8];
         boolean validRook[][] = rookMove(row, col, currentTurn);
@@ -149,6 +164,101 @@ public class Piece {
         return validMove;
     }
 
+    public boolean[][] kingMove(int row, int col, boolean currentTurn){
+        boolean validMove[][] = new boolean[8][8];
+        if(row != 0){
+            if(positions[row-1][col] == ' '){ // if square above empty
+                validMove[row-1][col] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row-1][col])){ // if white and black is above
+                validMove[row-1][col] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row-1][col])){
+                validMove[row-1][col] = true;
+            }
+        }
+        if(row != 7){
+            if(positions[row+1][col] == ' '){ // if square below empty
+                validMove[row+1][col] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row+1][col])){
+                validMove[row+1][col] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row+1][col])){
+                validMove[row+1][col] = true;
+            }
+        }
+        if(col != 7){
+            if(positions[row][col+1] == ' '){ // if square to right empty
+                validMove[row][col+1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row][col+1])){
+                validMove[row][col+1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row][col+1])){
+                validMove[row][col+1] = true;
+            }
+        }
+        if(col != 0){
+            if(positions[row][col-1] == ' '){ // if square to left empty
+                validMove[row][col-1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row][col-1])){
+                validMove[row][col-1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row][col-1])){
+                validMove[row][col-1] = true;
+            }
+        }
+        if(row != 0 && col != 0){ // if not at top and not left
+            if(positions[row-1][col-1] == ' '){
+                validMove[row-1][col-1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row-1][col-1])){
+                validMove[row-1][col-1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row-1][col-1])){
+                validMove[row-1][col-1] = true;
+            }
+        }
+        if(row != 7 && col != 7){
+            if(positions[row+1][col+1] == ' '){
+                validMove[row+1][col+1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row+1][col+1])){
+                validMove[row+1][col+1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row+1][col+1])){
+                validMove[row+1][col+1] = true;
+            }
+        }
+        if(col != 7 && row != 0){
+            if(positions[row-1][col+1] == ' '){
+                validMove[row-1][col+1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row-1][col+1])){
+                validMove[row-1][col+1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row-1][col+1])){
+                validMove[row-1][col+1] = true;
+            }
+        }
+        if(col != 0 && row != 7){
+            if(positions[row+1][col-1] == ' '){
+                validMove[row+1][col-1] = true;
+            }
+            else if(currentTurn && Character.isLowerCase(positions[row+1][col-1])){
+                validMove[row+1][col-1] = true;
+            }
+            else if(!currentTurn && Character.isUpperCase(positions[row+1][col-1])){
+                validMove[row+1][col-1] = true;
+            }
+        }
+
+
+        return validMove;
+    }
+
     public boolean[][] pawnMove(int row, int col, boolean currentTurn){
         boolean validMove[][] = new boolean[8][8];
         byte edge = 0;
@@ -219,20 +329,6 @@ public class Piece {
             }
         }
         return validMove;
-    }
-
-    public boolean[][] choosePiece(int coord1, int coord2, boolean currTurn){
-        if(Character.toLowerCase(positions[coord1][coord2]) == 'p')
-            return pawnMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'r')
-            return rookMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'b')
-            return bishopMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'n')
-            return knightMove(coord1, coord2, currTurn);
-        else if(Character.toLowerCase(positions[coord1][coord2]) == 'q')
-            return queenMove(coord1, coord2, currTurn);
-        return pawnMove(coord1, coord2, currTurn);
     }
 
     public boolean[][] bishopMove(int row, int col, boolean currentTurn){
